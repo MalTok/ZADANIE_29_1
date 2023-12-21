@@ -1,0 +1,15 @@
+spring:
+  profiles:
+    default: dev
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        hbm2ddl:
+          import_files_sql_extractor: org.hibernate.tool.schema.internal.script.MultiLineSqlScriptExtractor
+    hibernate:
+      ddl-auto: validate
+  liquibase:
+    change-log: classpath:/db/master.xml
+  messages:
+    basename: messages/messages
