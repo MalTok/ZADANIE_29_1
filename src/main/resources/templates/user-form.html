@@ -41,12 +41,14 @@
                 *Email (login)
                 <input type="email" class="form-control" th:field="*{email}" placeholder="jan@kowalski.pl">
             </label>
+            <p th:errors="*{email}" class="error">Błędny email</p>
         </div>
         <div class="mb-3">
             <label class="form-label">
                 *Hasło
                 <input type="password" class="form-control" th:field="*{password}" placeholder="silneHasło123!">
             </label>
+            <p th:errors="*{password}" class="error">Błędne hasło</p>
         </div>
         <div class="mb-3">
             <label class="form-check-label">
