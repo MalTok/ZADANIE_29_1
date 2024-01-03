@@ -36,18 +36,26 @@ class UserController {
         this.userEditNewsletterDtoMapper = userEditNewsletterDtoMapper;
     }
 
-    @GetMapping("/update")
-    public String update(@CurrentSecurityContext(expression = "authentication.name") String username, Model model) {
+    @ModelAttribute(name = "userPersonal")
+    UserEditPersonalDto userEditPersonalDto(@CurrentSecurityContext(expression = "authentication.name") String username) {
         Optional<User> usernameOptional = userService.findByEmail(username);
-        if (usernameOptional.isPresent()) {
-            User user = usernameOptional.get();
-            UserEditPersonalDto userEditPersonalDto = userEditPersonalDtoMapper.maptoDto(user);
-            model.addAttribute("userPersonal", userEditPersonalDto);
-            UserEditPasswordDto userEditPasswordDto = userEditPasswordDtoMapper.maptoDto(user);
-            model.addAttribute("userPassword", userEditPasswordDto);
-            UserEditNewsletterDto userEditNewsletterDto = userEditNewsletterDtoMapper.maptoDto(user);
-            model.addAttribute("userNewsletter", userEditNewsletterDto);
-        }
+        return usernameOptional.map(userEditPersonalDtoMapper::maptoDto).orElseGet(UserEditPersonalDto::new);
+    }
+
+    @ModelAttribute(name = "userPassword")
+    UserEditPasswordDto userEditPasswordDto(@CurrentSecurityContext(expression = "authentication.name") String username) {
+        Optional<User> usernameOptional = userService.findByEmail(username);
+        return usernameOptional.map(userEditPasswordDtoMapper::maptoDto).orElseGet(UserEditPasswordDto::new);
+    }
+
+    @ModelAttribute(name = "userNewsletter")
+    UserEditNewsletterDto userEditNewsletterDto(@CurrentSecurityContext(expression = "authentication.name") String username) {
+        Optional<User> usernameOptional = userService.findByEmail(username);
+        return usernameOptional.map(userEditNewsletterDtoMapper::maptoDto).orElseGet(UserEditNewsletterDto::new);
+    }
+
+    @GetMapping("/update")
+    public String update() {
         return "user-form-edit";
     }
 
@@ -56,14 +64,6 @@ class UserController {
                              BindingResult bindingResult,
                              RedirectAttributes redirectAttributes,
                              Model model) {
-        Optional<User> usernameOptional = userService.findByEmail(userEditPersonalDto.getEmail());
-        if (usernameOptional.isPresent()) {
-            User user = usernameOptional.get();
-            UserEditPasswordDto userEditPasswordDto = userEditPasswordDtoMapper.maptoDto(user);
-            model.addAttribute("userPassword", userEditPasswordDto);
-            UserEditNewsletterDto userEditNewsletterDto = userEditNewsletterDtoMapper.maptoDto(user);
-            model.addAttribute("userNewsletter", userEditNewsletterDto);
-        }
         if (bindingResult.hasErrors()) {
             model.addAttribute("userPersonal", userEditPersonalDto);
             return "user-form-edit";
@@ -79,14 +79,6 @@ class UserController {
                                  BindingResult bindingResult,
                                  RedirectAttributes redirectAttributes,
                                  Model model) {
-        Optional<User> usernameOptional = userService.findByEmail(userEditPasswordDto.getEmail());
-        if (usernameOptional.isPresent()) {
-            User user = usernameOptional.get();
-            UserEditPersonalDto userEditPersonalDto = userEditPersonalDtoMapper.maptoDto(user);
-            model.addAttribute("userPersonal", userEditPersonalDto);
-            UserEditNewsletterDto userEditNewsletterDto = userEditNewsletterDtoMapper.maptoDto(user);
-            model.addAttribute("userNewsletter", userEditNewsletterDto);
-        }
         if (bindingResult.hasErrors()) {
             model.addAttribute("userPassword", userEditPasswordDto);
             return "user-form-edit";
@@ -102,14 +94,6 @@ class UserController {
                                    BindingResult bindingResult,
                                    RedirectAttributes redirectAttributes,
                                    Model model) {
-        Optional<User> usernameOptional = userService.findByEmail(userEditNewsletterDto.getEmail());
-        if (usernameOptional.isPresent()) {
-            User user = usernameOptional.get();
-            UserEditPersonalDto userEditPersonalDto = userEditPersonalDtoMapper.maptoDto(user);
-            model.addAttribute("userPersonal", userEditPersonalDto);
-            UserEditPasswordDto userEditPasswordDto = userEditPasswordDtoMapper.maptoDto(user);
-            model.addAttribute("userPassword", userEditPasswordDto);
-        }
         if (bindingResult.hasErrors()) {
             model.addAttribute("userNewsletter", userEditNewsletterDto);
             return "user-form-edit";
