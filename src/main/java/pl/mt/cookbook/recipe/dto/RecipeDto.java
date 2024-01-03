@@ -16,7 +16,7 @@ public class RecipeDto {
     @Positive
     private int portion;
     @NotBlank
-    @Pattern(regexp = "^([a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+-[^;]+;)+$",
+    @Pattern(regexp = "^([^;-]+-[^;-]+;)+$",
             message = "Składniki rozdzielone średnikami (;), nazwa i ilość rozdzielone myślnikiem (-)")
     private String ingredients;
     @NotBlank
@@ -51,6 +51,10 @@ public class RecipeDto {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {

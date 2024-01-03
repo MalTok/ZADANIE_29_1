@@ -65,9 +65,16 @@ public class RecipeController {
     }
 
     @PostMapping("/update/{id}")
-    public String update(@PathVariable Long id, RecipeDto recipeDto) {
-        recipeService.update(id, recipeDto);
-        return "redirect:/recipe/" + id;
+    public String update(@PathVariable Long id, @Valid @ModelAttribute("recipe") RecipeDto recipeDto,
+                         BindingResult bindingResult,
+                         Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("recipe", recipeDto);
+            return "recipe-form-edit";
+        } else {
+            recipeService.update(id, recipeDto);
+            return "redirect:/recipe/" + id;
+        }
     }
 
     @PostMapping("/delete/{id}")

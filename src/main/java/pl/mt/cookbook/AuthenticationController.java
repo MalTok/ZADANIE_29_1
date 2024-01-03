@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pl.mt.cookbook.user.dto.UserDto;
+import pl.mt.cookbook.user.dto.UserAddDto;
 import pl.mt.cookbook.user.UserService;
 
 @Controller
@@ -21,17 +21,17 @@ public class AuthenticationController {
 
     @GetMapping("/register")
     public String addForm(Model model) {
-        model.addAttribute("user", new UserDto());
+        model.addAttribute("user", new UserAddDto());
         return "user-form";
     }
 
     @PostMapping("/register")
-    public String add(@Valid @ModelAttribute("user") UserDto userDto, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+    public String add(@Valid @ModelAttribute("user") UserAddDto userAddDto, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("user", userDto);
+            model.addAttribute("user", userAddDto);
             return "user-form";
         } else {
-            boolean saved = userService.save(userDto);
+            boolean saved = userService.save(userAddDto);
             if (saved) {
                 redirectAttributes.addFlashAttribute("registrationSuccess", true);
             }
