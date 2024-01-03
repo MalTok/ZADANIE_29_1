@@ -14,6 +14,7 @@ public class User {
     private Long id;
     private String firstName;
     private String lastName;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthDate;
     @Column(unique = true)
     private String email;
@@ -53,7 +54,6 @@ public class User {
         this.lastName = lastName;
     }
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     public Date getBirthDate() {
         return birthDate;
     }
